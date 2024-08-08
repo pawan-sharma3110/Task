@@ -7,13 +7,14 @@ import (
 )
 
 func InsertProduct(db *sql.DB, product model.Product) (msg string, err error) {
-	query := `
-  id UUID PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    price BIGINT NOT NULL, -- Using BIGINT for large prices; adjust as needed
-    stock_quantity INT NOT NULL, -- Use INT or BIGINT based on the expected range
-    description TEXT, -- Changed "discription" to "description" for correct spelling
-    added_on TIMESTAMP NOT NULL`
+	query := ` CREATE TABLE IF NOT EXISTS product(
+			id UUID PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			price BIGINT NOT NULL, -- Using BIGINT for large prices; adjust as needed
+			stock_quantity INT NOT NULL, -- Use INT or BIGINT based on the expected range
+			description TEXT, -- Changed "discription" to "description" for correct spelling
+			added_on TIMESTAMP NOT NULL
+	)`
 	_, err = db.Exec(query)
 	if err != nil {
 

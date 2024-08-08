@@ -14,7 +14,7 @@ import (
 var db = database.DbIn()
 
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "Post" {
+	if r.Method != "POST" {
 		http.Error(w, "Only post methord required", http.StatusBadRequest)
 		return
 	}
