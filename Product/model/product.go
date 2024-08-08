@@ -11,6 +11,6 @@ type Product struct {
 	Name          string    `json:"name"`
 	Price         uint      `json:"price"`
 	StockQuantity uint      `json:"stock_quantity"`
-	Discription   string    `json:"discription"`
+	Description   string    `json:"discription"`
 	AddedOn       time.Time `json:"added_on"`
 }
