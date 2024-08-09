@@ -6,10 +6,21 @@ import (
 )
 
 func main() {
-	var investmentAmount float64 = 1000
-	var expectReturnRate = 5.5
-	var year float64 = 10
+	const inflationRate = 2.5
+	var investmentAmount float64
+	var expectReturnRate float64 = 5.5
+	var year float64
+
+	fmt.Print("Investment Amount: ")
+	fmt.Scan(&investmentAmount)
+	fmt.Print("Expected return rate: ")
+	fmt.Scan(&expectReturnRate)
+	fmt.Print("Years: ")
+	fmt.Scan(&year)
 
 	var futureValue = float64(investmentAmount) * math.Pow(1+expectReturnRate/100, year)
+	futureRealValue := futureValue / math.Pow(1+inflationRate/100, year)
+
 	fmt.Println(futureValue)
+	fmt.Println(futureRealValue)
 }
