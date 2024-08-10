@@ -1,20 +1,32 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strconv"
+)
 
-var accountBalance float64 = 1000.0
+var accountBalance, _ = getBalance()
 var choice int
 
 func main() {
 
-	userGreet()
-	choice = userChoise()
-	userResponse(choice)
+	fmt.Println("Welcome to Go Bank!")
+	for {
+		userGreet()
+		choice = userChoise()
+
+		if choice == 4 {
+			break
+		}
+		userResponse(choice)
+	}
 
 }
 func userGreet() {
-	fmt.Println("Welcome to Go Bank!")
-	fmt.Println("What do you eant to do?")
+
+	fmt.Println("What do you want to do?")
 	fmt.Println("1. Ckeck money")
 	fmt.Println("2. Depodit money")
 	fmt.Println("3. Withdraw money")
@@ -29,9 +41,10 @@ func userChoise() int {
 }
 
 func userResponse(choice int) {
-	if choice == 1 {
+	switch choice {
+	case 1:
 		fmt.Println("Your balance is:", accountBalance)
-	} else if choice == 2 {
+	case 2:
 		fmt.Print("Your deposit amount :")
 		var depositAmmount float64
 		fmt.Scan(&depositAmmount)
@@ -40,8 +53,10 @@ func userResponse(choice int) {
 			return
 		}
 		accountBalance += depositAmmount //accountBalance + depositAmmount
+		writeBalance(accountBalance)
 		fmt.Println("Total Balance: ", accountBalance)
-	} else if choice == 3 {
+	case 3:
+
 		fmt.Print("How much amount You withdraw ? :")
 		var withdrawBalance float64
 		fmt.Scan(&withdrawBalance)
@@ -54,12 +69,30 @@ func userResponse(choice int) {
 			return
 		}
 		accountBalance -= withdrawBalance //accountBalance - depositAmmount
+		writeBalance(accountBalance)
 		fmt.Println("Total Remaining Balance: ", accountBalance)
-	} else if choice == 4 {
+	case 4:
 		fmt.Println("Good By!")
 		return
-	} else {
+	default:
 		fmt.Println(" Please enter valid input.")
 		return
 	}
+
+}
+func writeBalance(balance float64) {
+	balanceText := fmt.Sprint(balance)
+	os.WriteFile("balance.txt", []byte(balanceText), 0644)
+}
+func getBalance() (float64, error) {
+	data, err := os.ReadFile("balance.txt")
+	if err != nil {
+		return 1000, errors.New("error while getin balance")
+	}
+	balanceText := string(data)
+	balance, err := strconv.ParseFloat(balanceText, 64)
+	if err != nil {
+		return 1000, errors.New("error while converting balance in float64")
+	}
+	return balance, nil
 }
