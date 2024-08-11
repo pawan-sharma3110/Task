@@ -1,10 +1,11 @@
 POST http://localhost:8080/events
 Content-Type: application/json
 
-{
-    "name": "Phone",
-    "location":"Haryana",
-    "description": "most used popular",
-    "dateTime":"2025-01-01T15:30:000Z"
-
-}
+ {
+     "name": "Sample Event",
+  "description": "This is a description of the sample event.",
+  "location": "Sample Location",
+  "datetime": "2024-08-12T12:00:00Z",
+  "user_id": 26
+  
+  }

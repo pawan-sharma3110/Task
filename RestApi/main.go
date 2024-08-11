@@ -1,6 +1,9 @@
+// main.go
+
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"rest/api/database"
 	"rest/api/models"
@@ -8,10 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var events []models.Event
-
 func main() {
-	database.DbIn()
+	database.DbIn() // Initialize the database connection
 	server := gin.Default()
 	server.GET("/events", getEvent)
 	server.POST("/events", createEvent)
@@ -19,7 +20,7 @@ func main() {
 }
 
 func getEvent(context *gin.Context) {
-	// events := models.GetAllEvent()
+	events := models.GetAllEvent()
 	context.JSON(http.StatusOK, events)
 }
 
@@ -32,8 +33,8 @@ func createEvent(context *gin.Context) {
 	}
 	err = event.Save()
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save event."})
+		context.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Could not save event: %v", err)})
 		return
 	}
-	context.JSON(http.StatusCreated, gin.H{"massage": "Event created.", "event": event})
+	context.JSON(http.StatusCreated, gin.H{"message": "Event created.", "event": event})
 }
