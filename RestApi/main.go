@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"rest/api/database"
 	"rest/api/models"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,7 @@ import (
 var events []models.Event
 
 func main() {
+	database.DbIn()
 	server := gin.Default()
 	server.GET("/events", getEvent)
 	server.POST("/events", createEvent)
@@ -28,8 +30,10 @@ func createEvent(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Could not parse json data."})
 		return
 	}
-	event.ID = 1
-	event.UserID = 1
-	events = append(events, event)
+	err = event.Save()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save event."})
+		return
+	}
 	context.JSON(http.StatusCreated, gin.H{"massage": "Event created.", "event": event})
 }
