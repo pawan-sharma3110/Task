@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/Pallinder/go-randomdata"
 )
 
 var accountBalance, _ = getBalance()
@@ -13,6 +15,7 @@ var choice int
 func main() {
 
 	fmt.Println("Welcome to Go Bank!")
+	fmt.Println("Contect us 24*7 at :", randomdata.PhoneNumber())
 	for {
 		userGreet()
 		choice = userChoise()
