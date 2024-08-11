@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var events []models.Event
+
 func main() {
 	server := gin.Default()
 	server.GET("/events", getEvent)
@@ -15,7 +17,7 @@ func main() {
 }
 
 func getEvent(context *gin.Context) {
-	events := models.GetAllEvent()
+	// events := models.GetAllEvent()
 	context.JSON(http.StatusOK, events)
 }
 
@@ -28,5 +30,6 @@ func createEvent(context *gin.Context) {
 	}
 	event.ID = 1
 	event.UserID = 1
+	events = append(events, event)
 	context.JSON(http.StatusCreated, gin.H{"massage": "Event created.", "event": event})
 }
