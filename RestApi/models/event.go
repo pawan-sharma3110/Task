@@ -33,7 +33,7 @@ func (e *Event) Save() error {
 	return nil
 }
 
-func GetAllEvent() ([]Event, error) {
+func GetAllEvents() ([]Event, error) {
 	query := `SELECT id, name, location, datetime, user_id FROM events`
 	rows, err := database.DB.Query(query)
 	if err != nil {
@@ -56,4 +56,13 @@ func GetAllEvent() ([]Event, error) {
 	}
 
 	return events, nil
+}
+func GetAllEventById(id int64) (*Event, error) {
+	var event Event
+	query := `SELECT * FROM events WHERE id =$1`
+	err := database.DB.QueryRow(query, id).Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &event, nil
 }
