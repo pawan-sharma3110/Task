@@ -7,7 +7,7 @@ import (
 )
 
 type Event struct {
-	ID          int
+	ID          int64
 	Name        string `binding:"required"`
 	Description string `binding:"required"`
 	Location    string `binding:"required"`
@@ -27,14 +27,14 @@ func (e *Event) Save() error {
 	if err != nil {
 		return fmt.Errorf("error executing statement: %w", err)
 	}
-	e.ID = id
+	e.ID = int64(id)
 	e.DateTime = time.Now()
 	fmt.Print(id)
 	return nil
 }
 
 func GetAllEvents() ([]Event, error) {
-	query := `SELECT id, name, location, datetime, user_id FROM events`
+	query := `SELECT id, name,description, location, datetime, user_id FROM events`
 	rows, err := database.DB.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("error executing statement: %w", err)
@@ -44,7 +44,7 @@ func GetAllEvents() ([]Event, error) {
 	var events []Event
 	for rows.Next() {
 		var event Event
-		err := rows.Scan(&event.ID, &event.Name, &event.Location, &event.DateTime, &event.UserID)
+		err := rows.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
@@ -57,7 +57,7 @@ func GetAllEvents() ([]Event, error) {
 
 	return events, nil
 }
-func GetAllEventById(id int64) (*Event, error) {
+func GetEventById(id int64) (*Event, error) {
 	var event Event
 	query := `SELECT * FROM events WHERE id =$1`
 	err := database.DB.QueryRow(query, id).Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
@@ -65,4 +65,28 @@ func GetAllEventById(id int64) (*Event, error) {
 		return nil, err
 	}
 	return &event, nil
+}
+
+func (event Event) Update() error {
+	query := `
+		UPDATE events
+		SET name =$2,description=$3,location=$4,dateTime=$5,user_id=$6
+		WHERE id =$1`
+	stmt, err := database.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(event.ID, event.Name, event.Description, event.Location, time.Now(), event.UserID)
+	return err
+}
+func (event Event) Delete() error {
+	query := `DELETE FROM events WHERE id =$1`
+	stmt, err := database.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(event.ID)
+	return err
 }
