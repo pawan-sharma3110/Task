@@ -3,8 +3,8 @@
 package main
 
 import (
-	"rest/api/database"
-	"rest/api/routes"
+	"rest-api/database"
+	"rest-api/routes"
 
 	"github.com/gin-gonic/gin"
 )

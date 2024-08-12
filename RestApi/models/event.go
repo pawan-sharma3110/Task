@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"rest/api/database"
+	"rest-api/database"
 	"time"
 )
 

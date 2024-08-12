@@ -3,7 +3,7 @@ package routes
 import (
 	"fmt"
 	"net/http"
-	"rest/api/models"
+	"rest-api/models"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
