@@ -26,18 +26,18 @@ func (u *User) Save() (*int64, error) {
 	u.ID = id
 	return &u.ID, nil
 }
-func (u User) ValidateCredentials() error {
+func (u User) ValidateCredentials() (*int64,error) {
 	var retrievedPass string
 	query := `SELECT id,password FROM users WHERE email=$1`
 	err := database.DB.QueryRow(query, u.Email).Scan(&u.ID, &retrievedPass)
 	if err != nil {
-		return err
+		return nil,err
 	}
 	passwordValid := utils.CompairePAssword(u.Password, retrievedPass)
 	if !passwordValid {
-		return errors.New("credentials invalid")
+		return nil,errors.New("credentials invalid")
 	}
-	return nil
+	return &u.ID,nil
 }
 
 // errors.New("credentials invalid email")

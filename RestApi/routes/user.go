@@ -30,12 +30,12 @@ func login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Could not parse json data."})
 		return
 	}
-	err = user.ValidateCredentials()
+	id, err := user.ValidateCredentials()
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-	token, err := utils.GernateToken(user.Email, user.ID)
+	token, err := utils.GernateToken(user.Email, *id)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": fmt.Sprintf("error: %v", err.Error())})
 		return
