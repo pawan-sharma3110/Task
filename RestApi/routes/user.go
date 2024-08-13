@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"rest-api/models"
+	"rest-api/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,6 +35,11 @@ func login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"massage": "login successfuly"})
+	token, err := utils.GernateToken(user.Email, user.ID)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": fmt.Sprintf("error: %v", err.Error())})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"massage": "login successfuly", "token": token})
 
 }

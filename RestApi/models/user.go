@@ -28,10 +28,10 @@ func (u *User) Save() (*int64, error) {
 }
 func (u User) ValidateCredentials() error {
 	var retrievedPass string
-	query := `SELECT password FROM users WHERE email=$1`
-	err := database.DB.QueryRow(query, u.Email).Scan(&retrievedPass)
+	query := `SELECT id,password FROM users WHERE email=$1`
+	err := database.DB.QueryRow(query, u.Email).Scan(&u.ID, &retrievedPass)
 	if err != nil {
-		return errors.New("credentials invalid email")
+		return err
 	}
 	passwordValid := utils.CompairePAssword(u.Password, retrievedPass)
 	if !passwordValid {
@@ -39,3 +39,5 @@ func (u User) ValidateCredentials() error {
 	}
 	return nil
 }
+
+// errors.New("credentials invalid email")
