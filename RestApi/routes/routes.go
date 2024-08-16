@@ -11,10 +11,11 @@ func RegisterRoutes(server *gin.Engine) {
 	server.GET("/events/:id", getEvent)
 	authenticated := server.Group("/")
 	authenticated.Use(middleware.Autenticate)
-	authenticated.POST("/events",createEvent)
+	authenticated.POST("/events", createEvent)
 	authenticated.PUT("/events/:id", updateEvent)
 	authenticated.DELETE("/events/:id", deleteEvent)
-
+	authenticated.POST("/events/:id/register", updateEvent)
+	authenticated.DELETE("/events/:id/register", updateEvent)
 	// user routes
 	server.POST("/signup", signup)
 	server.POST("/login", login)
