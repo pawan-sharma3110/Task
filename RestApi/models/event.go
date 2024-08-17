@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"rest-api/database"
 	"time"
 )
@@ -89,4 +90,21 @@ func (event Event) Delete() error {
 	defer stmt.Close()
 	_, err = stmt.Exec(event.ID)
 	return err
+}
+
+func (e Event) Register(userid int64) error {
+	query := `INSERT INTO registerations(event_id,user_id)VALUES($1,$2)`
+	stmt, err := database.DB.Prepare(query)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(e.ID, userid)
+	if err != nil {
+		log.Fatal(err)
+		return err
+
+	}
+	return nil
 }
